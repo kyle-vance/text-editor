@@ -12,12 +12,12 @@ const initdb = async () =>
     },
   });
 
-export const putDb = async (data) => {
+export const putDb = async (content) => {
   console.log('Request to add your content to the database recieved');
-  const jate = await openDB('jate', 1);
-  const text = jate.transaction('jate', 'readwrite');
-  const store = text.objectStore('jate');
-  const request = store.put({ jate: data });
+  const jateDB = await openDB('jate', 1);
+  const tx = jateDB.transaction('jate', 'readwrite');
+  const store = tx.objectStore('jate');
+  const request = store.put({ id: 1, value: content });
   const final = await request;
   console.log('The database has been updated', final);
   console.error('putDb not implemented');
@@ -29,11 +29,11 @@ export const getDb = async () => {
   const jateOpen = await openDB('jate', 1);
   const text = jateOpen.transaction('jate', 'readonly');
   const store = text.objectStore('jate');
-  const request = store.getAll();
+  const request = store.get(1);
   const final = await request;
-  console.log('final.value', final);
+  console.log('final.value', final?.final);
   console.error('getDb not implemented');
-  return final;
+  return final?.value;
 }
 
 initdb();
